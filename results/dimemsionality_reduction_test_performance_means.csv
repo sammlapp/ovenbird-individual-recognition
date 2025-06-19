@@ -1,0 +1,4 @@
+reduction_algorithm,ndim,ari,nmi,fmi,homogeneity,completeness,v_measure,purity,accuracy
+tsne,2,0.96,0.97,0.96,0.98,0.96,0.97,0.99,0.96
+tsne,3,0.99,0.99,0.99,0.99,0.98,0.99,1.0,0.98
+umap,30,0.95,0.96,0.96,0.98,0.95,0.96,0.99,0.95

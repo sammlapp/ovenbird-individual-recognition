@@ -1,0 +1,38 @@
+name: "HawkEars"
+repeats: 5
+
+preprocessing:
+  clip_duration: 3 # seconds
+  use_overlay: False
+  high_contrast: False
+  reduce_noise: False
+
+data:
+  max_points: null #subset training points to size
+  n_train_samples: 10_000 #subset training to size
+
+training: # training hyperparameters
+  batch_size: 128
+  num_workers: 5
+  num_epochs: 10
+  device: "cuda:0"
+  # losses: binary_cross_entropy_loss, cross_entropy_loss, subcenter_arcface_loss, contrastive_point_loss, ssl_contrastive_point_loss
+  loss_fn: "binary_cross_entropy_loss" 
+  n_points_per_batch: 8 # only relevant for contrastive losses
+  n_clip_replicates: 2 # only relevant for contrastive losses
+  arcface_loss_subcenters: 1 #only used if loss_fn="subcenter_arcface_loss"
+  clustering_interval_epochs: 1 # only used if loss_fn="ssl_contrastive_point"; update pseudo-labels every N epochs
+  backbone: "hawkears"
+
+# dimensionality reduction and clustering
+clustering:
+  reduction_algorithm: "tsne" # tsne, umap, or null -> no reduction
+  reduced_n_dimensions: 3 # max is 3 when using TSNE, 20 is good for umap
+  min_cluster_size: 7 # difficult to tune this hyperparameter for individual ID, depends on dataset size
+
+# paths
+paths:
+  save_dir: "/ocean/projects/bio200037p/sammlapp/song25_oven_aiid/training_results"
+  train_clips_path: "/jet/projects/bio200037p/sml161/song25_oven_aiid/train_clips"
+  background_clips_path: "/jet/projects/bio200037p/sml161/song25_oven_aiid/background_clips"
+  labeled_clips_path: "/jet/projects/bio200037p/sml161/song25_oven_aiid/labeled_clips"

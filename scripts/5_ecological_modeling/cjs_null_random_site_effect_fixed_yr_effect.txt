@@ -1,0 +1,97 @@
+
+model {
+
+  # Priors and linear models
+  for (s in 1:n.site){
+    for (t in 1:(n.occ-1)){
+      
+      # phi: survival at site s, time t
+      phi[t, s] <- ilogit(lphi[t, s]) # survival
+      
+      # p: recapture probability given return
+      # here, it is a constant across year t and site s
+      p[t, s] <- p_intercept # p_year[t]
+      
+      # survival has a random effect for site, fixed effect for year, fixed effect for block
+      # mean_lphi_site for null model is intercept-only (comes from lphi_year: one intercept per year)
+      # block effect: dummy variable 1 for SGL034, 0 for Ohiopyle
+      lphi[t, s] <- lphi_site_random_effect[s] + lphi_block[s] + lphi_year[t]  # mean_lphi_site[s] + 
+      
+    }
+
+    # Linear model for site-level effects on survival
+    lphi_site_random_effect[s] ~ dnorm(0, tau.lphi.site)
+    lphi_block[s] <- blockSGL034[s] * lphi_block_sgl034 # dummy variable for Block = SGL034, 0 if other block (Ohiopyle)
+  }
+  
+  # Hyperpriors for hyperparams
+  
+  # fixed effect for yearly survival and recapture
+  # phi_intercept ~ dunif(0,1)
+  # lphi_intercept <- logit(phi_intercept)
+  p_intercept ~ dunif(0,1)
+  
+  for (t in 1:(n.occ-1)){
+    
+    phi_year[t] ~ dunif(0,1)
+    lphi_year[t]<-logit(phi_year[t])
+    
+    # we don't model separate yearly detection probabilities
+    #p_year[t] ~ dunif(0,1)
+  }
+  
+  # fixed effect for block
+  lphi_block_sgl034~dnorm(0,0.1)
+
+  # backtransform site means for first year (2021)
+  phi_sgl034_2021 <- ilogit(lphi_year[1]+lphi_block_sgl034)
+  phi_ohiopyle_2021 <- ilogit(lphi_year[1])
+
+  # survival random effect variance:
+  # we use tau to represent the stdev of the logit-normal,
+  # which relates to the sd of the normal distribution as tau=sd^-2
+  sd.lphi.site ~ dunif(0, 3)
+  tau.lphi.site <- pow(sd.lphi.site, -2)
+  
+  # calculate +/- 2 stdev of site survival
+  phi.site.plus2sd <- ilogit(lphi_year[1]+2*sd.lphi.site)
+  phi.site.minus2sd <- ilogit(lphi_year[1]-2*sd.lphi.site)
+
+  mean.p ~ dunif(0, 1)
+
+  # Coefficients for covariates
+  beta_slope ~ dnorm(0, 0.1)
+  beta_ba ~ dnorm(0, 0.1)
+  beta_canopy ~ dnorm(0, 0.1)
+
+  # Multinomial likelihood for the m-array data (JAGS style)
+  for (s in 1:n.site){
+    for (t in 1:(n.occ-1)){
+      MARR[t,1:n.occ,s] ~ dmulti(pr[t, , s], R[t,s])
+    }
+  }
+
+  # Define the cell probabilities of the m-array
+  # Main diagonal
+  for (s in 1:n.site){
+    for (t in 1:(n.occ-1)){
+      q[t,s] <- 1-p[t,s] # Probability of non-recapture
+      pr[t,t,s] <- phi[t,s]*p[t,s]
+      # Above main diagonal
+      for (j in (t+1):(n.occ-1)){
+        pr[t,j,s] <- prod(phi[t:j,s])*prod(q[t:(j-1),s])*p[j,s]
+      } #j
+      # Below main diagonal
+      for (j in 1:(t-1)){
+        pr[t,j,s] <- 0
+      }
+    }
+  }
+
+  # Last column of m-array: probability of non-recapture
+  for (s in 1:n.site){
+    for (t in 1:(n.occ-1)){
+      pr[t,n.occ,s] <- 1-sum(pr[t,1:(n.occ-1),s])
+    }
+  }
+}

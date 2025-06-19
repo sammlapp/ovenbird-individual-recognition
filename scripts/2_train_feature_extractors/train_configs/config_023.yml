@@ -1,0 +1,30 @@
+clustering:
+  min_cluster_size: 7
+  reduced_n_dimensions: 3
+  reduction_algorithm: tsne
+data:
+  max_points: null
+  n_train_samples: 5000
+name: 5000 samples
+paths:
+  background_clips_path: /jet/projects/bio200037p/sml161/song25_oven_aiid/background_clips
+  labeled_clips_path: /jet/projects/bio200037p/sml161/song25_oven_aiid/labeled_clips
+  save_dir: /ocean/projects/bio200037p/sammlapp/song25_oven_aiid/training_results
+  train_clips_path: /jet/projects/bio200037p/sml161/song25_oven_aiid/train_clips
+preprocessing:
+  clip_duration: 3
+  high_contrast: false
+  reduce_noise: false
+  use_overlay: false
+repeats: 5
+training:
+  arcface_loss_subcenters: 1
+  backbone: resnet18
+  batch_size: 128
+  clustering_interval_epochs: 1
+  device: cuda:0
+  loss_fn: binary_cross_entropy_loss
+  n_clip_replicates: 2
+  n_points_per_batch: 8
+  num_epochs: 10
+  num_workers: 5
