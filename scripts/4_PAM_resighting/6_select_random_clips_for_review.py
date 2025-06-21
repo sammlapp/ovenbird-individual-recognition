@@ -6,6 +6,9 @@ from glob import glob
 import datetime
 import numpy as np
 from tqdm.autonotebook import tqdm
+from pathlib import Path
+import bioacoustics_model_zoo as bmz
+from sklearn.metrics import roc_auc_score, precision_score, recall_score
 
 np.random.seed(2025)
 
@@ -53,8 +56,6 @@ for dataset in metadata.keys():
     else:
         earliest = 0
 
-    from pathlib import Path
-
     files["card"] = files["file"].apply(lambda x: Path(x).parent.stem)
     files["point_code"] = files["card"].map(dpl["point_code"])
     files = files[files["point_code"].isin(points)]
@@ -91,8 +92,6 @@ for year, clips in all_clips.groupby("year"):
 reviewed = pd.read_csv("./random_reviewed.csv")
 reviewed.groupby("year")["annotation"].value_counts()
 
-import bioacoustics_model_zoo as bmz
-
 h = bmz.HawkEars()
 df = pd.DataFrame(
     {
@@ -105,8 +104,6 @@ p = h.predict(df, batch_size=64, num_workers=0)
 reviewed["hawkears_OVEN_score"] = p["Ovenbird"].values
 
 reviewed.to_csv("./random_reviewed_w_score.csv", index=False)
-
-from sklearn.metrics import roc_auc_score, precision_score, recall_score
 
 for year, subset in reviewed.groupby("year"):
     auroc = roc_auc_score(

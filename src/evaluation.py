@@ -3,13 +3,20 @@ from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 from sklearn.metrics import fowlkes_mallows_score, homogeneity_completeness_v_measure
 from sklearn.metrics import silhouette_score, accuracy_score
 import numpy as np
+import pandas as pd
 from pathlib import Path
-
-from dataset import AIIDLocalizedClipDataset
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 import torch
 import scipy
+from sklearn.preprocessing import StandardScaler
+import umap
+from sklearn.manifold import TSNE
+from sklearn.cluster import HDBSCAN
+from sklearn.metrics import confusion_matrix
+from scipy.optimize import linear_sum_assignment
+from dataset import AIIDLocalizedClipDataset
+from preprocessor import OvenbirdPreprocessor
 
 
 def identity(x):

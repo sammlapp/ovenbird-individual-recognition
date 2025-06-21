@@ -5,9 +5,7 @@ from glob import glob
 import pandas as pd
 from tqdm.autonotebook import tqdm
 from pathlib import Path
-import datetime
 import joblib
-import aru_metadata_parser
 
 # find clean predictions with no other species detected
 ds_paths = {

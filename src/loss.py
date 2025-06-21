@@ -34,6 +34,7 @@ def ssl_location_loss(
         temperature: "sharpens" the similarity matrix
         same_clip_weight: contribution of loss term for "same clip, different augmentation, incentivise feature similarity" to total loss
         different_location_weight: contribution of loss term for "clips from different locations (points) should not have similar features" to total loss
+        same_location_weight: contribution of loss term for "clips from same location should have similar features" to total loss
         pseudo_label_weight: contribution of loss term for "clips from the same pseudo-label should have similar features" to total loss
         device: torch device on which to compute the loss
     """

@@ -14,10 +14,9 @@ from pathlib import Path
 from tqdm.autonotebook import tqdm
 import torch
 import random
-
-# local tool imports
 import sys
 
+# local tool imports
 sys.path.append(f"../../src/")
 from preprocessor import OvenbirdPreprocessor
 from model import Resnet18_Classifier

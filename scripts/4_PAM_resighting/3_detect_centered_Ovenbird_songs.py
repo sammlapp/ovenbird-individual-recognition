@@ -6,16 +6,12 @@
 # Please contact the authors if you wish to obtain the original dataset.
 
 import sys
-from glob import glob
 from pathlib import Path
 from time import time as timer
-
 import bioacoustics_model_zoo as bmz
 import numpy as np
 import opensoundscape as opso
 import pandas as pd
-from opensoundscape import Audio
-from tqdm.autonotebook import tqdm
 
 sys.path.append("../../src/")
 from preprocessor import mute_and_normalize

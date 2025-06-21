@@ -1,9 +1,5 @@
 import numpy as np
 import pandas as pd
-import numpy as np
-
-
-from torch.utils.data.sampler import Sampler
 from torch.utils.data import Sampler, Dataset, RandomSampler
 from opensoundscape.annotations import categorical_to_multi_hot
 from opensoundscape.sample import AudioSample

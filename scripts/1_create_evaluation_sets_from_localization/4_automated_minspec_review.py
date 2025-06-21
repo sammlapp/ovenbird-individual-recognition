@@ -1,22 +1,15 @@
-from opensoundscape import Audio, Spectrogram, CNN, BoxedAnnotations
-
-import numpy as np
-import pandas as pd
+import json
+import shutil
 from glob import glob
 from pathlib import Path
-import shutil
-from matplotlib import pyplot as plt
-
-from opensoundscape.ml import bioacoustics_model_zoo as bmz
-
-from opensoundscape.localization import PositionEstimate
-from opensoundscape.localization.position_estimate import (
-    positions_to_df,
-    df_to_positions,
-)
-import json
 
 import librosa
+import numpy as np
+from joblib import Parallel, delayed
+from opensoundscape import Audio, Spectrogram
+from opensoundscape.localization import PositionEstimate
+from opensoundscape.localization.position_estimate import positions_to_df
+from opensoundscape.ml import bioacoustics_model_zoo as bmz
 
 # Paths
 out_dir = f"REDACTED"
@@ -95,8 +88,6 @@ for path in array_event_jsons:
         except:
             Audio.silence(sample_rate=48000, duration=3).save(f"{clip_dir}/{i}.wav")
             return 1
-
-    from joblib import Parallel, delayed
 
     results = Parallel(n_jobs=12)(
         delayed(process)(p, i) for i, p in enumerate(positions)

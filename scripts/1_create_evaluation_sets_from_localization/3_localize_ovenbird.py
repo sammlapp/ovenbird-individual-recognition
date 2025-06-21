@@ -2,7 +2,6 @@
 # Note: the full audio data used by this script is not provided in this repository, the script is provided for reference only
 
 from opensoundscape.localization import SynchronizedRecorderArray
-
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -10,6 +9,9 @@ from pathlib import Path
 from time import time as timer
 from tqdm.autonotebook import tqdm
 import json
+import datetime
+import pytz
+import warnings
 
 # localization parameters
 min_n_receivers = 5
@@ -27,10 +29,6 @@ localized_events_path = "REDACTED"  # matches
 # table of min/max frequency to bandpass audio to for each species localized
 # sp_freq_ranges_path = "REDACTED"
 # here, instead of using a table we hard-code the values for Ovenbird
-
-import datetime
-import pytz
-
 
 def get_dt(f, offset):
     dt = datetime.datetime.strptime(
@@ -113,7 +111,6 @@ for deployment_folder in deployment_folders:
 
     sp_list = ["Ovenbird"]
     detections = detections[sp_list]
-    import warnings
 
     # species_freq_ranges = pd.read_csv(sp_freq_ranges_path).set_index("english_common")
     # bandpass_ranges = {

@@ -9,77 +9,16 @@ library(jagsUI)
 library(stringr)
 
 ## Base CJS: constant phi and p across time and space
-cat(file = "cjs_base.txt","
-model {
-
-  # Priors and linear models
-  for (s in 1:n.site){
-    for (t in 1:(n.occ-1)){
-      
-      # phi: probability of survival and return
-      # here it is constant across year t and site s
-      phi[t, s] <- ilogit(lphi_intercept) # survival
-      lphi[t, s] <- lphi_intercept
-      
-      # p: recapture probability given return
-      # here, it is a constant across year t and site s
-      p[t, s] <- p_intercept # p_year[t]
-      
-    }
-  }
-  
-  # Hyperpriors for hyperparams
-  
-  # fixed effect for yearly survival and recapture
-  p_intercept ~ dunif(0,1)
-  phi_intercept ~ dunif(0,1)
-  lphi_intercept<-logit(phi_intercept)
-
-  # Multinomial likelihood for the m-array data (JAGS style)
-  for (s in 1:n.site){
-    for (t in 1:(n.occ-1)){
-      MARR[t,1:n.occ,s] ~ dmulti(pr[t, , s], R[t,s])
-    }
-  }
-
-  # Define the cell probabilities of the m-array
-
-  for (s in 1:n.site){
-    for (t in 1:(n.occ-1)){
-      # Main diagonal
-      q[t,s] <- 1-p[t,s] # Probability of non-recapture
-      pr[t,t,s] <- phi[t,s]*p[t,s]
-      # Above main diagonal
-      for (j in (t+1):(n.occ-1)){
-        pr[t,j,s] <- prod(phi[t:j,s])*prod(q[t:(j-1),s])*p[j,s]
-      } #j
-      # Below main diagonal
-      for (j in 1:(t-1)){
-        pr[t,j,s] <- 0
-      }
-    }
-  }
-
-  # Last column of m-array: probability of non-recapture
-  for (s in 1:n.site){
-    for (t in 1:(n.occ-1)){
-      pr[t,n.occ,s] <- 1-sum(pr[t,1:(n.occ-1),s])
-    }
-  }
-}
-")
-
 
 # Directory containing detection history files
-det_hist_dir <- "/Users/SML161/song25_oven_aiid/oven_aiid/recapture_case_study/2_aiid_detection_history/det_hists_with_random_sampling"
-out_dir <- "/Users/SML161/song25_oven_aiid/case_study_mark_recapture_2021-2024/v4/random_review_simulations"
+det_hist_dir <- "../../results/detection_histories/det_hists_with_random_sampling"
 # List all relevant files
 det_hist_files <- list.files(
   path = det_hist_dir,
   pattern = "^random_\\d+_det_hist_\\d+\\.csv$",
   full.names = TRUE
 )
-det_hist_files = c(det_hist_files, "/Users/SML161/song25_oven_aiid/oven_aiid/recapture_case_study/2_aiid_detection_history/det_hists_with_random_sampling/full_det_hist.csv" )
+det_hist_files = c(det_hist_files, "./det_hists_with_random_sampling/full_det_hist.csv" )
 
 
 
@@ -117,7 +56,7 @@ for (f in det_hist_files) {
   
   # Initial values
   inits <- function(){list()}
-  na <- 5000 ; ni <- 6000 ; nt <- 3 ; nb <- 3000 ; nc <- 3 # faster, for testing
+  na <- 5000 ; ni <- 6000 ; nt <- 3 ; nb <- 3000 ; nc <- 3 
   
   # Parameters monitored
   params <- c("phi_intercept","p_intercept")
@@ -146,10 +85,5 @@ for (f in det_hist_files) {
   summary_df <- rbind(summary_df, data.frame(n_reviewed = n_reviewed, run = run, phi = phi, p = p))
 }
 
-write.csv(summary_df, file.path(out_dir, "all_cjs_summary_values.csv"), row.names = FALSE)
-
-
-
-
-
+write.csv(summary_df, file.path(out_dir, "../../results/survival_model_parameter_estimates/simulated_random_sampling_cjs_summary_values.csv"), row.names = FALSE)
 

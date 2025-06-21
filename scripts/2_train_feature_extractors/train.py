@@ -1,7 +1,6 @@
 from opensoundscape import Audio
 import numpy as np
 import pandas as pd
-import numpy as np
 import datetime
 from pathlib import Path
 from tqdm.autonotebook import tqdm
@@ -11,8 +10,10 @@ from torch.utils.data import DataLoader
 from opensoundscape.preprocess.actions import Action
 from time import time as timer
 from pytorch_metric_learning.losses import SubCenterArcFaceLoss
-
 import sys
+import wandb
+import yaml
+import bioacoustics_model_zoo as bmz
 
 sys.path.append("../../src/")
 from model import (
@@ -28,11 +29,7 @@ from model import (
 from preprocessor import OvenbirdPreprocessor
 from dataset import PointCodeDataset, PointCodeSampler
 import evaluation
-import wandb
 from loss import ssl_location_loss
-import yaml
-
-import bioacoustics_model_zoo as bmz
 
 def identity(x):
     return x

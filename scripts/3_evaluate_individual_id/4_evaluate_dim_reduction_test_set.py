@@ -14,10 +14,11 @@ from pathlib import Path
 from tqdm.autonotebook import tqdm
 import torch
 import random
+import sys
+import seaborn as sns
+from matplotlib import pyplot as plt
 
 # local tool imports
-import sys
-
 sys.path.append(f"../../src/")
 from preprocessor import OvenbirdPreprocessor
 from model import Resnet18_Classifier
@@ -82,14 +83,6 @@ summary = (
     .round(2)
 )
 summary.to_csv("../../results/dimemsionality_reduction_test_performance_means.csv")
-
-import seaborn as sns
-import numpy as np
-import pandas as pd
-from glob import glob
-from pathlib import Path
-
-from matplotlib import pyplot as plt
 
 
 def figsize(w, h):
