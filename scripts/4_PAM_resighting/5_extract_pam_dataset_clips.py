@@ -1,4 +1,6 @@
 # extract ~1.1M 3s clips as MP3 into a publishable dataset
+# this scrript was used to create the contents of the /audio directory in the
+# publicly available 4-year passive acoustic monitoring dataset (Dryad: add link once public)
 # Note: the inputs to this script are not included in this repository. The
 # script is included for reference only. The dataset created by this script is a
 # public dataset of Ovenbird detections in the selected date and time window.

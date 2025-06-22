@@ -22,7 +22,7 @@ metadata = {
 }
 
 # export re-usable set of clips for analysis
-dir = "../../../pam_dataset_v4/"
+dir = "REDACTED""
 
 
 points = pd.read_csv(f"{dir}/point_list.csv")["point"].values

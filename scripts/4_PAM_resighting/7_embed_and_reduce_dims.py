@@ -37,9 +37,10 @@ preprocessor = OvenbirdPreprocessor()
 
 # dataset contains 3s audio clips in which a species classification method detected Ovenbird
 ovenbird_clips = pd.read_csv(f"{pam_dataset_path}/pam_dataset_clips.csv")
-# can use extracted clips instead of original audio PAM data:
-# ovenbird_clips["file"]=ovenbird_clips['clip_name'].apply(lambda clip:f"{pam_dataset_path}/audio/{clip}")
-# ovenbird_clips['start_time']=0
+ovenbird_clips["file"] = ovenbird_clips["clip_name"].apply(
+    lambda clip: f"{pam_dataset_path}/audio/{clip}"
+)
+ovenbird_clips["start_time"] = 0
 ovenbird_clips["end_time"] = ovenbird_clips["start_time"] + 3
 ovenbird_clips = ovenbird_clips.set_index(["file", "start_time", "end_time"])
 

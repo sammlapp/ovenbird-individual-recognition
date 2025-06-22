@@ -81,10 +81,10 @@ dets_10_per_cluster.to_csv(
     f"{pam_dataset_path}/per_point_clusters_sample10.csv", index=False
 )
 
-# select medoid of each cluster
-ovenbird_clips[ovenbird_clips["cluster_30_medoid"] == True].to_csv(
-    f"{pam_dataset_path}/cluster_medoids.csv", index=False
-)
+# select medoid of each cluster (not used in the paper)
+# ovenbird_clips[ovenbird_clips["cluster_30_medoid"] == True].to_csv(
+#     f"{pam_dataset_path}/cluster_medoids.csv", index=False
+# )
 
 cluster_summary = ovenbird_clips.groupby("cluster_30")["point_code"].min()
 cluster_summary.to_csv(f"{pam_dataset_path}/cluster_summary.csv")
