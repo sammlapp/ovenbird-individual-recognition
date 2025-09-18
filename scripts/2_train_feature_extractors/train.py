@@ -31,6 +31,7 @@ from dataset import PointCodeDataset, PointCodeSampler
 import evaluation
 from loss import ssl_location_loss
 
+
 def identity(x):
     return x
 
@@ -39,7 +40,7 @@ print("loaded packages")
 start_time = timer()
 
 # config file path will be a command line arg, can set manually for dev purposes:
-if not '.yml' in sys.argv[-1]:
+if not ".yml" in sys.argv[-1]:
     sys.argv.append(
         "/jet/home/sammlapp/song25_oven_aiid/oven_aiid/develop_and_evaluate_aiid/4_train_aiid/train_configs/base.yml"
     )
@@ -66,11 +67,14 @@ train_df = train_df.set_index(["file", "start_time", "end_time"])
 if config["preprocessing"]["use_overlay"]:
     # selection of clips that do not contain Ovenbird songs (according to HawkEars) for overlays
     overlay_df = pd.read_csv(
-        f"{config['paths']['background_clips_path']}/background_clips.csv")
-    overlay_df['file']=overlay_df['clip_id'].apply(lambda f: f"{config['paths']['background_clips_path']}/{f}")
-    overlay_df['start_time']=0
-    overlay_df['end_time']=config['preprocessing']['clip_duration']
-    overlay_df = overlay_df.set_index(['file','start_time','end_time'])[[]]
+        f"{config['paths']['background_clips_path']}/background_clips.csv"
+    )
+    overlay_df["file"] = overlay_df["clip_id"].apply(
+        lambda f: f"{config['paths']['background_clips_path']}/{f}"
+    )
+    overlay_df["start_time"] = 0
+    overlay_df["end_time"] = config["preprocessing"]["clip_duration"]
+    overlay_df = overlay_df.set_index(["file", "start_time", "end_time"])[[]]
 else:
     overlay_df = None
 
@@ -257,7 +261,7 @@ for experiment_repeat in range(config["repeats"]):
                 optimizer.zero_grad()
                 model.train()
                 if loss_optimizer is not None:
-                    loss_optimizer.zero_grad()
+                    loss_optimizer.step()
 
                 batch_data = torch.vstack([s.data[None, :, :] for s in batch_samples])
                 batch_data = batch_data.to(model.device)
@@ -277,7 +281,11 @@ for experiment_repeat in range(config["repeats"]):
                         ).to(model.device)
                     else:
                         batch_pseudolabels = None
-                    weights = config["training"]["contrastive_loss"] if 'contrastive_loss' in config['training'] else {}
+                    weights = (
+                        config["training"]["contrastive_loss"]
+                        if "contrastive_loss" in config["training"]
+                        else {}
+                    )
                     loss = loss_fn(
                         features=outputs,
                         labels=batch_pseudolabels,
@@ -327,12 +335,11 @@ for experiment_repeat in range(config["repeats"]):
         metrics_epoch["train_loss"] = loss_hist[-1]
 
         # during experiments, we discard models rather than saving weights!
-        if metrics_epoch['ari']>best_ari:
-            best_ari = metrics_epoch['ari']
-            if "save_checkpoints" in config and config["save_checkpoints"]==True:
-                
-                torch.save(model.state_dict(), f"{save_dir}/best.pth")
+        if metrics_epoch["ari"] > best_ari:
+            best_ari = metrics_epoch["ari"]
+            if "save_checkpoints" in config and config["save_checkpoints"] == True:
 
+                torch.save(model.state_dict(), f"{save_dir}/best.pth")
 
         print(f"Validation set ARI at epoch {epoch}: {metrics_epoch['ari']}")
         metrics.extend([metrics_epoch])
