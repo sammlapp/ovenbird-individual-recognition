@@ -1,6 +1,5 @@
 /scripts/resources/precomputed_embeddings
 /manuscript_copy
 CLAUDE.md
-src/__pycache__/preprocessor.cpython-311.pyc
-.DS_Store
+src/__pycache__
 .DS_Store
