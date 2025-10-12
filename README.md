@@ -18,11 +18,24 @@ Lapp, Sam, R. Patrick Lyon, Scott J. Wilson, Tessa A. Rhinehart, Chapin Czarneck
 
 ## Overview
 
-This codebase implements a complete pipeline for **Automated Acoustic Individual Identification (AIID)** of Ovenbirds using passive acoustic monitoring (PAM) data. The system uses deep learning to identify individual birds from their vocalizations with 96% accuracy, enabling non-invasive tracking of 405 individuals across multiple years for ecological research.
+This codebase implements a complete pipeline for **Automated Acoustic Individual Identification (AIID)** of Ovenbirds using passive acoustic monitoring (PAM) data. The system uses deep learning to identify individual birds from their vocalizations with 96% accuracy, enabling non-invasive tracking of 405 individuals across multiple years for ecological research. We provide code and documentation for the extension of our approach to other species. 
 
 ### Key Innovation
 
 Rather than requiring manually labeled individual identities for training, our approach uses **recording location as pseudo-labels**. This allows the system to learn individual-specific vocal features from unlabeled PAM data, making large-scale individual recognition feasible for ecological studies.
+
+### How to use this code base
+
+The Python Notebook `demo.ipynb` demonstrates the use of our custom feature extractor for discriminating individual Ovenbirds by song. It uses a small sample dataset of 100 songs from 10 individual Ovenbirds, which is included in this repository. You can look through the code and outputs of the notebook or run it yourself (see "Run a demo..." below).
+
+The `scripts` folder contains the full set of Python and R scripts and notebooks used for the analyses in the manuscript. Some of these rely on large passive acoustic monitoring datasets that are not provided publicly, but are available from the authors upon reasonable request. Others use the publicly available annotated evaluation dataset and passive acoustic monitoring dataset to reproduce the figures and results from the manuscript. 
+
+The `src` folder contains Python implementations of the machine learning approaches described in the manuscript. 
+
+The `results` and `figures` folders contain tabular and visual outputs from our experiments and analyses. 
+
+The `checkpoints` folder contains the model weights of a machine learning model (ResNet 18 CNN in Pytorch) that we trained for the task of discriminating between the songs of individual Ovenbirds. 
+
 
 ## Methodology
 
@@ -38,7 +51,7 @@ Our approach follows a 6-step workflow:
 ## Repository Structure
 
 ```
-├── src/                          # Core source code
+├── src/                         # Core source code
 │   ├── dataset.py               # Data loading and batch sampling
 │   ├── model.py                 # Neural network architectures
 │   ├── loss.py                  # Custom contrastive loss functions
@@ -60,7 +73,7 @@ Our approach follows a 6-step workflow:
 │   ├── model_comparisons/       # Architecture performance plots
 │   └── clustering_examples/     # Individual clustering visualizations
 ├── checkpoints/                 # Trained model weights
-└── manuscript_copy/            # PDF copies of manuscript and supplements
+└── demo.ipynb                   # Demo notebook applying feature extractor to sample data
 ```
 
 ## Run a demo of the individual identification model in Google Colab

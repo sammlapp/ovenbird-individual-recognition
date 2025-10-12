@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
 from matplotlib import pyplot as plt
+from pathlib import Path
 import torch
 import torch.nn as nn
 import torchvision.models as models
 from opensoundscape.ml import cnn_architectures
+from opensoundscape import CNN
+import opensoundscape as opso
 
 
 def identity(x):
@@ -130,6 +133,7 @@ class Resnet18_Classifier(nn.Module):
         self.embedder = resnet18_1ch_embedder()
 
         self.classifier = nn.Linear(512, num_classes)
+        self.constructor_name = "Resnet18_Classifier"
 
     def forward(self, x):
         emb = self.embedder(x)
@@ -161,6 +165,7 @@ class Resnet50_Embedder(nn.Module):
         return (x, x)
 
 
+@opso.ml.cnn_architectures.register_arch
 def resnet18_1ch_embedder():
     # Load a pretrained ResNet18 model
     m = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
@@ -168,6 +173,8 @@ def resnet18_1ch_embedder():
     m.conv1 = cnn_architectures.change_conv2d_channels(m.conv1, num_channels=1)
     # remove the final fully connected layer
     m.fc = nn.Identity()
+
+    m.constructor_name = "resnet18_1ch_embedder"
     return m
 
 
@@ -210,25 +217,59 @@ class Resnet18_Bottleneck_Classifier(nn.Module):
         logits = self.classifier(x)
         return feat, logits
 
+
 class HawkEarsOneModel(torch.nn.Module):
     """select one of the hawkears ensembled models, add separate classification head"""
-    def __init__(self,num_classes=None):
+
+    def __init__(self, num_classes=None):
         import bioacoustics_model_zoo as bmz
 
         super().__init__()
         # load largest ensembled hawkears pre-trained model
         self.embedder = bmz.HawkEars().network.models[4]
         # remove original classification head
-        self.embedder.head.fc = torch.nn.Identity() 
+        self.embedder.head.fc = torch.nn.Identity()
         # create new classification head
-        self.classifier = torch.nn.Linear(2048,num_classes)
-    
-    def forward(self,x):
+        self.classifier = torch.nn.Linear(2048, num_classes)
+
+    def forward(self, x):
         """returns (embeddings, logits)"""
         embeddings = self.embedder(x)
         logits = self.classifier(embeddings)
         return embeddings, logits
-    
+
+
 def hawkears_preprocessor():
     return bmz.HawkEars().preprocessor
-    
+
+
+def load_ovenbird_model():
+    # load the trained Ovenbird feature extractor model, using GPU device if one is available
+    project_root = Path(__file__).parent.parent
+    ckpt_path = project_root / "checkpoints/full_2025-04-10T11:02:36.028451_best.pth"
+
+    # select MPS or CUDA GPU if available, otherwise CPU
+    device = opso.ml.cnn._gpu_if_available()
+    ovenbird_feature_extractor = Resnet18_Classifier(num_classes=234)
+    ovenbird_feature_extractor.load_state_dict(
+        torch.load(ckpt_path, map_location=device)
+    )
+    ovenbird_feature_extractor.device = device
+    ovenbird_feature_extractor.to(device)
+
+    model = CNN(
+        ovenbird_feature_extractor.embedder, sample_duration=2.0, classes=range(512)
+    )
+
+    # create standard preprocessor for Ovenbird song clips
+    from preprocessor import OvenbirdPreprocessor
+
+    pre = OvenbirdPreprocessor()
+    pre.pipeline.load_audio.set(load_metadata=False)
+
+    model.preprocessor = pre
+
+    # specify default layer for .embed() outputs
+    model.network.embedding_layer = "avgpool"
+
+    return model
