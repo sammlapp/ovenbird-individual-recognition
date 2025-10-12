@@ -76,9 +76,9 @@ Our approach follows a 6-step workflow:
 └── demo.ipynb                   # Demo notebook applying feature extractor to sample data
 ```
 
-## Run a demo of the individual identification model in Google Colab
+## Run a demo of the individual identification model
 
-You can run the demo.ipynb python notebook or simply inspect the results to see how our custom trained feature extractor clusters individuals in a feature space, and inspect a few songs. 
+You can run the demo.ipynb python notebook or simply inspect the results to see how our custom trained feature extractor clusters individuals in a feature space, and inspect a few songs. First, follow the Environment Setup instructions below, then run the Python Notebook using Jupyter, VS Code, Google Colab, or another notebook manager. 
 
 ## Reproducing results from the manuscript
 
