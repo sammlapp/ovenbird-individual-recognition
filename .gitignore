@@ -4,3 +4,5 @@ CLAUDE.md
 src/__pycache__
 .DS_Store
 localization_dataset_labeled_clips
+pam_dataset_v4
+scripts/.DS_Store

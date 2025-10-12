@@ -80,12 +80,21 @@ Our approach follows a 6-step workflow:
 
 You can run the demo.ipynb python notebook or simply inspect the results to see how our custom trained feature extractor clusters individuals in a feature space, and inspect a few songs. First, follow the Environment Setup instructions below, then run the Python Notebook using Jupyter, VS Code, Google Colab, or another notebook manager. 
 
+Running the notebook will create:
+- embeddings (512 features per audio clip) for 100 Ovenbird songs
+- visualization of these features reduced to 2 dimensions and colored by individual label
+- Spectrogram visualizations and interactive audio widgets for a few of the songs
+
+This notebook takes about 1-2 minutes to run on a modern laptop with a GPU, and 3-10 minutes on a laptop without a GPU. 
+
 ## Reproducing results from the manuscript
 
 ### 1. Environment Setup
 
 For Python scripts and notebooks (training, evaluation, mark recapture case study):
-Create a python environment and install dependencies
+
+Create a python environment and install dependencies from the `requirements.txt` file: 
+
 (this command line code snippet assumes you're using conda for managing python environments)
 
 ```bash
@@ -94,10 +103,16 @@ conda activate ovenbirds
 pip install -r requirements.txt
 ```
 
+Typicall installation time is <5 minutes.
+
 For ecological modeling in R:
 ```r
 install.packages(c("jagsUI", "AHMbook", "ggplot2", "dplyr", "patchwork", "rjags", "tidyr"))
 ```
+
+Typicall installation time is <5 minutes.
+
+Our code has been tested on Mac and Linux operating systems with Python 3.11, but should also run on Windows and other Python versions. Contact the developers if you have issues running this code on your platform. 
 
 ### 2. Training Feature Extractors
 
