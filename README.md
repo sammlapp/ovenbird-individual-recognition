@@ -63,22 +63,22 @@ Our approach follows a 6-step workflow:
 └── manuscript_copy/            # PDF copies of manuscript and supplements
 ```
 
-## Usage Instructions
+## Run a demo of the individual identification model in Google Colab
+
+You can run the demo.ipynb python notebook or simply inspect the results to see how our custom trained feature extractor clusters individuals in a feature space, and inspect a few songs. 
+
+## Reproducing results from the manuscript
 
 ### 1. Environment Setup
 
-Install required dependencies:
+For Python scripts and notebooks (training, evaluation, mark recapture case study):
+Create a python environment and install dependencies
+(this command line code snippet assumes you're using conda for managing python environments)
+
 ```bash
-# Core ML libraries
-pip install torch torchvision pytorch-metric-learning
-pip install scikit-learn pandas numpy tqdm
-
-# Bioacoustics and audio processing
-pip install opensoundscape bioacoustics_model_zoo
-pip install umap-learn hdbscan
-
-# Experiment tracking
-pip install wandb
+conda create -n ovenbirds python=3.11
+conda activate ovenbirds
+pip install -r requirements.txt
 ```
 
 For ecological modeling in R:

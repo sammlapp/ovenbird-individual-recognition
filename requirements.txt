@@ -1,0 +1,11 @@
+torchvision
+pytorch-metric-learning
+scikit-learn
+pandas
+numpy
+tqdm
+opensoundscape
+bioacoustics_model_zoo
+umap-learn
+hdbscan
+wandb
