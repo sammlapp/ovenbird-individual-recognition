@@ -9,3 +9,5 @@ bioacoustics_model_zoo
 umap-learn
 hdbscan
 wandb
+seaborn
+matplotlib-tufte

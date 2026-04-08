@@ -244,7 +244,7 @@ def hawkears_preprocessor():
 
 
 def load_ovenbird_model():
-    # load the trained Ovenbird feature extractor model, using GPU device if one is available
+    # load the final trained Ovenbird feature extractor model, using GPU device if one is available
     project_root = Path(__file__).parent.parent
     ckpt_path = project_root / "checkpoints/full_2025-04-10T11:02:36.028451_best.pth"
 
