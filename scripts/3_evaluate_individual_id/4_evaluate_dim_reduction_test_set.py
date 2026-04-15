@@ -23,6 +23,7 @@ sys.path.append(f"../../src/")
 from preprocessor import OvenbirdPreprocessor
 from model import Resnet18_Classifier
 import evaluation
+from opensoundscape.ml.cnn import _gpu_if_available
 
 random.seed(2024)
 np.random.seed(2024)
@@ -39,26 +40,29 @@ val_labels = labels[labels["data_split"] == "val"]
 test_labels = labels[labels["data_split"] == "test"]
 # Generate test set embeddings with each model
 
-## Supervised point=label
+## Supervised point=label trained model
 ckpt_path = "../../checkpoints/full_best.pth"
+
+# select MPS or CUDA GPU if available, otherwise CPU
+device = _gpu_if_available()
 m = Resnet18_Classifier(num_classes=234)
-m.load_state_dict(torch.load(ckpt_path))
-m.device = torch.device("cuda:0")
-m.to(m.device)
+m.load_state_dict(torch.load(ckpt_path, map_location=device))
+m.device = device
+m.to(device)
 
 pre = OvenbirdPreprocessor()
 pre.pipeline.load_audio.set(load_metadata=False)
 
 # create embeddings once, this is a deterministic step
 print("embedding samples")
-test_embeddings = evaluation.embed(test_labels, m, pre, batch_size=128, num_workers=8)
+test_embeddings = evaluation.embed(test_labels, m, pre, batch_size=128, num_workers=0)
 
 
 all_scores = []
 nreps = 30
 for alg in ("umap", "tsne"):
     if alg == "umap":
-        ndim_options = [30]
+        ndim_options = [2, 3, 5, 10, 20, 30]
     elif alg == "tsne":
         ndim_options = [2, 3]
     for ndim in ndim_options:
@@ -97,8 +101,8 @@ plt.rcParams["ps.fonttype"] = 42
 
 sns.boxplot(
     dim_red_performance.reset_index(),
-    x="ndims",
+    x="ndim",
     y="accuracy",
     hue="reduction_algorithm",
 )
-plt.savefig("../../figures/dimensionality_reduction_val_accuracy.pdf")
+plt.savefig("../../figures/dimensionality_reduction_test_accuracy.pdf")

@@ -36,6 +36,8 @@ The `results` and `figures` folders contain tabular and visual outputs from our 
 
 The `checkpoints` folder contains the model weights of a machine learning model (ResNet 18 CNN in Pytorch) that we trained for the task of discriminating between the songs of individual Ovenbirds. 
 
+If you have issues installing packages or running the code on Windows, we highly recommend using Windows Subsystem for Linux (WSL2) or Google Colab, which are optimized for machine learning workflows. 
+
 
 ## Methodology
 

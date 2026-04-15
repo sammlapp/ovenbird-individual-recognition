@@ -16,6 +16,7 @@ sys.path.append("../../src/")
 from preprocessor import OvenbirdPreprocessor
 from model import Resnet18_Classifier
 from dataset import PointCodeDataset
+from opensoundscape.ml.cnn import _gpu_if_available
 
 # specify local paths
 weights_path = "../../checkpoints/full_2025-04-10T11:02:36.028451_best.pth"  # feature extractor checkpoint
@@ -28,10 +29,12 @@ num_workers = 12
 
 # load trained contrastive OVEN AIID model
 
+# select MPS or CUDA GPU if available, otherwise CPU
+device = _gpu_if_available()
 model = Resnet18_Classifier(num_classes=234)
-model.load_state_dict(torch.load(weights_path))
-model.device = "cuda:0"
-model.to(model.device)
+model.load_state_dict(torch.load(weights_path, map_location=device))
+model.device = device
+model.to(device)
 
 preprocessor = OvenbirdPreprocessor()
 

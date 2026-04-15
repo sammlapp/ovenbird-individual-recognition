@@ -1,0 +1,5 @@
+model,val_auc,val_ap
+ovenbird,1.0,0.996
+baseline_resnet18,0.998,0.968
+hawkears,0.952,0.663
+birdnet,1.0,0.987
