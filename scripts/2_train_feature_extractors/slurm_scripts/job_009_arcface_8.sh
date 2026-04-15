@@ -2,7 +2,7 @@
 #SBATCH --job-name=arcface_all
 #SBATCH --output=logs/arcface_all.out
 #SBATCH --error=logs/arcface_all.err
-#SBATCH --time=2:00:00
+#SBATCH --time=4:00:00
 #SBATCH --nodes=1
 #SBATCH --partition=GPU-shared
 #SBATCH --gpus=1
