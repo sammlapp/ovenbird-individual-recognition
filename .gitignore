@@ -9,3 +9,5 @@ scripts/.DS_Store
 figures/.DS_Store
 scripts/3_evaluate_individual_id/6_eval_vs_baselines_with_perch2.ipynb
 scripts/3_evaluate_individual_id/generate_perch2_embeddings.ipynb
+**/.DS_Store
+results_v1/
