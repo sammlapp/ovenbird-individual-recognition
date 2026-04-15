@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=exp_set_001
-#SBATCH --output=logs/exp_set_001.out
-#SBATCH --error=logs/exp_set_001.err
-#SBATCH --time=4:00:00
+#SBATCH --job-name=redo_128pts
+#SBATCH --output=logs/redo_128pts.out
+#SBATCH --error=logs/redo_128pts.err
+#SBATCH --time=3:00:00
 #SBATCH --nodes=1
 #SBATCH --partition=GPU-shared
 #SBATCH --gpus=1
@@ -15,11 +15,11 @@ conda activate /jet/projects/bio200037p/sml161/conda/opso
 
 cd /jet/home/sammlapp/song25_oven_aiid/oven_aiid/develop_and_evaluate_aiid/4_train_aiid
 
-python train.py train_configs/config_005.yml
-python train.py train_configs/config_006.yml
-python train.py train_configs/config_007.yml
-python train.py train_configs/config_008.yml
-python train.py train_configs/config_009.yml
+# python train.py train_configs/config_005.yml
+# python train.py train_configs/config_006.yml
+# python train.py train_configs/config_007.yml
+python train.py train_configs/config_019.yml
+# python train.py train_configs/config_009.yml
 
 python ~/scripts/jobstats.py
 

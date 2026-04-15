@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=hawkears
-#SBATCH --output=logs/hawkears.out
-#SBATCH --error=logs/hawkears.err
-#SBATCH --time=12:00:00
+#SBATCH --job-name=exp_set_006
+#SBATCH --output=logs/exp_set_006.out
+#SBATCH --error=logs/exp_set_006.err
+#SBATCH --time=6:00:00
 #SBATCH --nodes=1
 #SBATCH --partition=GPU-shared
 #SBATCH --gpus=1
@@ -15,7 +15,7 @@ conda activate /jet/projects/bio200037p/sml161/conda/opso
 
 cd /jet/home/sammlapp/song25_oven_aiid/oven_aiid/develop_and_evaluate_aiid/4_train_aiid
 
-python train.py train_configs/hawkears.yml
+python train.py train_configs/config_026.yml
 
 python ~/scripts/jobstats.py
 
