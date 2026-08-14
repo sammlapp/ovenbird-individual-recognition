@@ -1,5 +1,5 @@
-epsilon,Mean,Std,Min,Max
-20,0.74,0.05,0.68,0.87
-30,0.86,0.07,0.8,0.98
-40,0.89,0.05,0.81,0.99
-50,0.81,0.08,0.73,0.99
+HDBSCAN epsilon (m),Song vs Spatial Matching accuracy,Median diameter (m),Mean diameter (m),Number of spatial clusters
+20,0.72,27,30,42
+30,0.82,41,42,40
+40,0.86,57,65,33
+50,0.78,78,88,27

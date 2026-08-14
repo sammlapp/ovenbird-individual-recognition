@@ -11,3 +11,4 @@ hdbscan
 wandb
 seaborn
 matplotlib-tufte
+waxwing
