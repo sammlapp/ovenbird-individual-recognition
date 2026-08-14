@@ -1,0 +1,5 @@
+HDBSCAN epsilon (m),20,30,40,50
+Song vs Spatial Matching accuracy,0.72,0.82,0.86,0.78
+Median diameter (m),27,41,57,78
+Mean diameter (m),30,42,65,88
+Number of spatial clusters,42,40,33,27

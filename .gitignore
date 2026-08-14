@@ -12,3 +12,4 @@ scripts/3_evaluate_individual_id/generate_perch2_embeddings.ipynb
 **/.DS_Store
 results_v1/
 scripts/resources/.DS_Store
+results/detection_histories/
